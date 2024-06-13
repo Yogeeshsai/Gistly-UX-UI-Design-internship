@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Interface</title>
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: green;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="home-page">
+        <h2>Upload Interface</h2>
+        <label><input type="radio" name="upload-type" value="audio-video"> Upload Audio/Video</label><br>
+        <label><input type="radio" name="upload-type" value="csv"> Upload CSV</label><br>
+        <button onclick="showUploadPage()">Continue</button>
+    </div>
+
+    <div id="audio-video-upload-page" class="hidden">
+        <h2>Audio/Video Upload</h2>
+        <div class="upload-area" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+            Drag and drop files here
+        </div>
+        <div class="progress-bar" id="progress-bar"></div>
+        <label><input type="checkbox" id="include-summary"> Include Summary</label><br>
+        <label>Select Scoring Template: 
+            <select id="scoring-template">
+                <option>Template 1</option>
+                <option>Template 2</option>
+            </select>
+        </label><br>
+        <button onclick="submitUpload()">Submit</button>
+    </div>
+
+    <div id="csv-upload-page" class="hidden">
+        <h2>CSV Upload</h2>
+        <button onclick="downloadTemplate()">Download CSV Template</button>
+        <div class="upload-area" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+            Drag and drop CSV file here
+        </div>
+        <div class="progress-bar" id="progress-bar-csv"></div>
+        <h3>Map CSV Columns</h3>
+        Column 1: <select><option>Audio/Video Link</option><option>Sales Manager</option><option>Sales Agent</option></select><br>
+        Column 2: <select><option>Audio/Video Link</option><option>Sales Manager</option><option>Sales Agent</option></select><br>
+        Column 3: <select><option>Audio/Video Link</option><option>Sales Manager</option><option>Sales Agent</option></select><br>
+        <label>Select Scoring Template: 
+            <select id="scoring-template-csv">
+                <option>Template 1</option>
+                <option>Template 2</option>
+            </select>
+        </label><br>
+        <button onclick="submitUpload()">Submit</button>
+    </div>
+
+    <div id="shared-features" class="hidden">
+        <h2>Select Agents/Managers</h2>
+        Sales Agent: <select><option>Agent 1</option><option>Agent 2</option></select><br>
+        Sales Manager: <select><option>Manager 1</option><option>Manager 2</option></select><br>
+        <button onclick="finalSubmit()">Submit</button>
+    </div>
+
+    <div id="confirmation-message" class="hidden">
+        <h2>Upload Successful</h2>
+    </div>
+
+    <script>
+        function showUploadPage() {
+            const uploadType = document.querySelector('input[name="upload-type"]:checked').value;
+            document.getElementById('home-page').classList.add('hidden');
+            if (uploadType === 'audio-video') {
+                document.getElementById('audio-video-upload-page').classList.remove('hidden');
+            } else {
+                document.getElementById('csv-upload-page').classList.remove('hidden');
+            }
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const files = event.dataTransfer
